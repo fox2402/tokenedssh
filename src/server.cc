@@ -3,6 +3,9 @@
 #include <iostream>
 #include <system_error>
 #include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 #include <netinet/ip.h>
 #include <unistd.h>
@@ -42,8 +45,9 @@ Server::Server(std::string srcport, std::string srcstr)
   port = srcport;
   config_file = srcstr;
   buffer = new char[1024];
-  bind_socket();
+  parse_file();
   ep_socket = epoll_create1(0);
+  bind_socket();
 
   if (ep_socket == -1)
     throw std::system_error(errno, std::system_category());
@@ -56,6 +60,24 @@ Server::~Server()
   close(server_socket);
   close(ep_socket);
 }
+
+void Server::parse_file()
+{
+  std::ifstream infile;
+  infile.open(config_file);
+  std::string line;
+  while (std::getline(infile, line))
+  {
+    std::stringstream sstr;
+    sstr.str(line);
+    std::string word1;
+    std::string word2;
+    std::getline(sstr, word1, ' ');
+    std::getline(sstr, word2, ' ');
+    login_token_map[word1] = word2;
+  }
+}
+
 
 void Server::bind_socket()
 {

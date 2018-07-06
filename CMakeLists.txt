@@ -27,4 +27,4 @@ set (HDRS
      include/server.h)
 
 #create a rule to make
-add_executable(mini-mumble ${SRCS} ${MAIN} ${HDRS})
+add_executable(tkn_ssh ${SRCS} ${MAIN} ${HDRS})

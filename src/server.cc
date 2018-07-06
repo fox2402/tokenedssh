@@ -186,7 +186,27 @@ void Server::manage_req(int client)
 
 void Server::manage_LOG(int client)
 {
-  (void) client;
+  if (read_size > 3)
+  {
+    std::string str(buffer + 3, read_size - 3);
+    std::stringstream sstr;
+    sstr.str(str);
+    std::string word1;
+    std::string word2;
+    std::getline(sstr, word1, ' ');
+    std::getline(sstr, word2, ' ');
+    try 
+    {
+      if (login_token_map[word1] == word2)
+        write(client, "YES", 3);
+      else
+        write(client, "NOP", 3);
+    }
+    catch (...)
+    {
+      write(client, "NOP", 3);
+    }
+  }
 }
 
 void Server::manage_SSH(int client)

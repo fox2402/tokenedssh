@@ -1,5 +1,7 @@
 #pragma once
 
+
+#include <map>
 #include <vector>
 #include <stdexcept>
 #include <string>
@@ -18,12 +20,16 @@ class Server
 
     
   private:
+    void parse_file();
     void bind_socket();
     
     void server_loop();
 
     void manage_req(int client);
-    
+    void manage_LOG(int client);
+    void manage_SSH(int client);
+
+    std::map<std::string, std::string> login_token_map;
     std::vector<int>  clients_list;
     int               server_socket;
     int               ep_socket;
@@ -32,6 +38,8 @@ class Server
     ssize_t           read_size;
     ssize_t           write_size{0};
     
+
+
     std::string       port;
     std::string       config_file;
 };

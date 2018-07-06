@@ -171,5 +171,25 @@ void Server::begin_listen()
 
 void Server::manage_req(int client)
 {
+  std::string s(buffer, 3);
+  if (!s.compare("LOG"))
+  {
+    manage_LOG(client);
+    return;
+  }
+  if (!s.compare("SSH"))
+  {
+    manage_SSH(client);
+    return;
+  }
+}
+
+void Server::manage_LOG(int client)
+{
+  (void) client;
+}
+
+void Server::manage_SSH(int client)
+{
   (void) client;
 }

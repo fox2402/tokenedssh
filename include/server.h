@@ -30,7 +30,9 @@ class Server
     void manage_SSH(int client);
 
     std::map<std::string, std::string> login_token_map;
-    std::vector<int>  clients_list;
+    std::map<int, bool> logged_client;
+    std::map<std::string, bool> used_login;
+    std::map<int, std::string> client_login;
     int               server_socket;
     int               ep_socket;
     

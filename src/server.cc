@@ -75,6 +75,7 @@ void Server::parse_file()
     std::getline(sstr, word1, ' ');
     std::getline(sstr, word2, ' ');
     login_token_map[word1] = word2;
+    used_login[word1] = false;
   }
 }
 
@@ -136,6 +137,7 @@ void Server::server_loop()
         if (epoll_ctl(ep_socket, EPOLL_CTL_ADD, client, &ev) == -1)
           throw std::system_error(errno, std::system_category(),
             "can't add to epoll");
+        logged_client[client] = false;
       }
       else
       {
@@ -147,7 +149,10 @@ void Server::server_loop()
             std::cout << "Lost one client" << std::endl;
             if (epoll_ctl(ep_socket, EPOLL_CTL_DEL, events[i].data.fd, NULL) == -1)
               throw std::system_error(errno, std::system_category(),
-              "can't add to epoll");
+              "can't del from epoll");
+      
+            logged_client.erase(logged_client.find(events[i].data.fd));
+            client_login.erase(client_login.find(events[i].data.fd));
           }
           manage_req(events[i].data.fd);
       }
@@ -197,8 +202,12 @@ void Server::manage_LOG(int client)
     std::getline(sstr, word2, ' ');
     try 
     {
-      if (login_token_map[word1] == word2)
+      if (login_token_map[word1] == word2 && !used_login[word1])
+      {
         write(client, "YES", 3);
+        logged_client[client] = true;
+        client_login[client] = word1;
+      }
       else
         write(client, "NOP", 3);
     }

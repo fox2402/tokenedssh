@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import socket
+import os
 
 host = "localhost"
 port = 16555
@@ -19,7 +20,7 @@ while(True):
     break
   print("Login/token invalid or already used")
 
-with open("~/.ssh/my_git_key_file.pub", 'r') as f:
+with open(os.path.expanduser('~/.ssh/my_git_key_file.pub'), 'r') as f:
   stri = f.read()
   while True:
     socket.send(("SSH" + stri).encode("utf-8"))
@@ -27,4 +28,4 @@ with open("~/.ssh/my_git_key_file.pub", 'r') as f:
     if (data.decode("utf-8") == "YES"):
       break
 
-close(socket)
+socket.close()

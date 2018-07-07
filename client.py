@@ -20,5 +20,4 @@ while(True):
     break
   print("Login/token invalid or already used")
 
-shutdown(socket)
 close(socket)

@@ -194,6 +194,7 @@ void Server::manage_LOG(int client)
   if (read_size > 3)
   {
     std::string str(buffer + 3, read_size - 3);
+    std::cout << str << std::endl;
     std::stringstream sstr;
     sstr.str(str);
     std::string word1;
@@ -204,15 +205,20 @@ void Server::manage_LOG(int client)
     {
       if (login_token_map[word1] == word2 && !used_login[word1])
       {
+        std::cout << "YES" << std::endl;
         write(client, "YES", 3);
         logged_client[client] = true;
         client_login[client] = word1;
       }
       else
+      {
+        std::cout << "Not found" << std::endl;
         write(client, "NOP", 3);
+      }
     }
     catch (...)
     {
+      std::cout << "Catched" << std::endl;
       write(client, "NOP", 3);
     }
   }

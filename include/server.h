@@ -17,7 +17,7 @@ class Server
     ~Server();  
     
     void begin_listen();
-
+    void print_config();
     
   private:
     void parse_file();

@@ -234,3 +234,12 @@ void Server::manage_SSH(int client)
   write(client, "YES", 3);
   used_login[client_login[client]] = true;
 }
+
+
+void Server::print_config()
+{
+  for (const auto& it : login_token_map)
+  {
+    std::cout << it.first << " " << it.second << std::endl;
+  }
+}

@@ -14,10 +14,17 @@ while(True):
   
   glob = login + " " + token
   socket.send(("LOG" + glob).encode("utf-8"))
-  print("sended")
   data, addr = socket.recvfrom(1024)
   if (data.decode("utf-8") == "YES"):
     break
   print("Login/token invalid or already used")
+
+with open("~/.ssh/my_git_key_file.pub", 'r') as f:
+  stri = f.read()
+  while True:
+    socket.send(("SSH" + stri).encode("utf-8"))
+    data, addr = socket.recvfrom(1024)
+    if (data.decode("utf-8") == "YES"):
+      break
 
 close(socket)

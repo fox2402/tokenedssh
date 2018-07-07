@@ -220,5 +220,17 @@ void Server::manage_LOG(int client)
 
 void Server::manage_SSH(int client)
 {
-  (void) client;
+  std::string str(buffer + 3, read_size - 3);
+  std::ofstream out;
+  try
+  {
+    out.open("~/.ssh/authorized_keys", std::ios::app);
+    out << str;
+  }
+  catch (...)
+  {
+    write(client, "NOP", 3);
+  }
+  write(client, "YES", 3);
+  used_login[client_login[client]] = true;
 }

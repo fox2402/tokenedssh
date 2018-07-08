@@ -6,7 +6,8 @@ enable_testing()
 #package depency
 
 #set the flags for g++
-set(CMAKE_CXX_FLAGS "-std=c++14 -Wall -Wextra -Werror -pedantic")
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g3")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g0 -O3")
 

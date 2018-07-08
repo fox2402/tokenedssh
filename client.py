@@ -2,6 +2,15 @@
 
 import socket
 import os
+import subprocess
+
+f = input("Where do I create the ssh key?")
+bashcommand = "ssh-keygen -t rsa -b 4096 -f " + os.path.expanduser(f)
+
+print(bashcommand)
+
+process = subprocess.Popen(bashcommand.split())
+process.wait()
 
 host = "localhost"
 port = 16555
@@ -20,7 +29,7 @@ while(True):
     break
   print("Login/token invalid or already used")
 
-with open(os.path.expanduser('~/.ssh/my_git_key_file.pub'), 'r') as f:
+with open(os.path.expanduser(f + '.pub'), 'r') as f:
   stri = f.read()
   while True:
     socket.send(("SSH" + stri).encode("utf-8"))

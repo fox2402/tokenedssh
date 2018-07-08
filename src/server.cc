@@ -13,6 +13,7 @@
 #include <netdb.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <wordexp.h>
 
 namespace
 {
@@ -155,6 +156,7 @@ void Server::server_loop()
             client_login.erase(client_login.find(events[i].data.fd));
           }
           manage_req(events[i].data.fd);
+          memset(buffer, 0, 1024);
       }
     }
   }
@@ -226,15 +228,23 @@ void Server::manage_LOG(int client)
 
 void Server::manage_SSH(int client)
 {
+  std::cout << "read: " << read_size << std::endl;
+  std::cout << "buffer: " << buffer << std::endl;
   std::string str(buffer + 3, read_size - 3);
   std::ofstream out;
   try
   {
-    out.open("~/.ssh/authorized_keys", std::ios::app);
-    out << str;
+    wordexp_t word;
+    wordexp("~/.ssh/authorized_keys", &word, 0);
+    out.open(word.we_wordv[0], std::ios::out | std::ios::app);
+    wordfree(&word);
+    out.write(str.c_str(), read_size - 3);
+    out.flush();
+    out.close();
   }
-  catch (...)
+  catch (const std::exception& e)
   {
+    std::cout << "error: " << e.what() << std::endl; 
     write(client, "NOP", 3);
   }
   write(client, "YES", 3);

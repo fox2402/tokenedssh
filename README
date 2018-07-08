@@ -1,0 +1,16 @@
+Simple ssh public key transfer on a token list
+(You shouldn't probably use that on prod tbh)
+
+
+the config file must be written like this:
+
+login token
+login token
+
+in other words: login space token\n repeated as many as you like
+
+because it was created for a pratictal on a given server, IP and Port
+are hard coded (well port probably should be). The ip can be changed
+in client.py:6. 
+
+Maybe a more secured version will come, marbe not, don't expect much

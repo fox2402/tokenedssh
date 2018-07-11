@@ -64,8 +64,11 @@ Server::~Server()
 
 void Server::parse_file()
 {
+  wordexp_t word;
+  wordexp(config_file.c_str(), &word, 0);
   std::ifstream infile;
-  infile.open(config_file);
+  infile.open(word.we_wordv[0]);
+  wordfree(&word);
   std::string line;
   while (std::getline(infile, line))
   {
